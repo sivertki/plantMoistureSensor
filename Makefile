@@ -1,5 +1,5 @@
 # Source files to be compiled
-SOURCE_FILES := main.c UART_driver.c
+SOURCE_FILES := main.c IO_driver.c Timer.c #UART_driver.c
 
 PROGRAMMER := arduino
 
