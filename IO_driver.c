@@ -82,3 +82,17 @@ void IO_set_LED_power(uint8_t power){
         PORTC &= ~(1<<PC2);
     }
 }
+
+void IO_toggle_LED() {
+    PORTC ^= (1<<PC2);
+}
+
+void IO_tick_init() {
+    //PD3
+    //Define port as output
+    DDRD |= (1<<PD3); 
+}
+
+void IO_tick() {
+    PORTD ^= (1<<PD3);
+}

@@ -6,9 +6,9 @@ void Timer_init() {
     //set prescaler to 1024
     TCCR2B |= (1<<CS22) | (1<<CS21) | (1<<CS20);
 
-    //250 in binary. With a 4MHz oscillator, each output compare match
-    //with 1024 prescaler is equavalent to 64ms. Enables the ability to count
-    //seconds divisible by 8.
+    //With a 4MHz oscillator, fused prescaler of 8, each output compare match
+    //with 1024 prescaler at 250 is equavalent to 512ms. 
+
     OCR2A = 0b11111010;
     
     //enable interrupt on ouput compare match A

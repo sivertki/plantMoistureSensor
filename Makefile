@@ -1,11 +1,13 @@
 # Source files to be compiled
 SOURCE_FILES := main.c IO_driver.c Timer.c #UART_driver.c
 
-PROGRAMMER := arduino
+PROGRAMMER := atmelice_isp
+
+AVRDUDE_VERSION := avrdude #/home/sivert/Software/arduino-1.8.9/hardware/tools/avr/bin/avrdude
 
 BUILD_DIR := build
-TARGET_CPU := atmega328p
-TARGET_DEVICE := m328p
+TARGET_CPU := atmega168
+TARGET_DEVICE := m168
 
 CC := avr-gcc
 CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)
@@ -26,13 +28,13 @@ $(BUILD_DIR)/main.hex: $(OBJECT_FILES) | $(BUILD_DIR)
 
 .PHONY: flash
 flash: $(BUILD_DIR)/main.hex
-	avrdude -v -p $(TARGET_DEVICE) -c $(PROGRAMMER) -P /dev/ttyUSB0 -b 115200 -U flash:w:$(BUILD_DIR)/main.hex:i
-
+	#$(AVRDUDE_VERSION) -v -p $(TARGET_DEVICE) -c $(PROGRAMMER) -C /home/sivert/Software/arduino-1.8.9/hardware/tools/avr/etc/avrdude.conf -P /dev/ttyUSB0 -b 115200 -U flash:w:$(BUILD_DIR)/main.hex:i
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U flash:w:$(BUILD_DIR)/main.hex:i
 .PHONY: fuse
 fuse:
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U efuse:w:0xff:m
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U hfuse:w:0xd9:m
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U lfuse:w:0x7f:m
+	$(AVRDUDE_VERSION) -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U efuse:w:0xff:m
+	$(AVRDUDE_VERSION) -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U hfuse:w:0xdf:m
+	$(AVRDUDE_VERSION) -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U lfuse:w:0x4c:m
 
 .PHONY: clean
 clean:
@@ -40,4 +42,4 @@ clean:
 
 .PHONY: erase
 erase:
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -e
+	$(AVRDUDE_VERSION) -p $(TARGET_DEVICE) -c $(PROGRAMMER) -e
